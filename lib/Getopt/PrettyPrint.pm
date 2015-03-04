@@ -147,17 +147,4 @@ EOFORMAT
 	}
 }
 
-my @options = (
-	'one!',
-	'two=s@',
-	'f|four=i',
-);
-
-my @descriptions = (
-	'This that the other something else blah blah blah yada yada',
-	'More of the same.  Are you really reading this?  It does not seem you are.  That is unfortunate as this stuff is super -- I mean SUPER -- interesting.',
-	'Huh.  Wonder what happened to --three?',
-);
-
-
-pretty_print_options(\@options, \@descriptions);
+1;
