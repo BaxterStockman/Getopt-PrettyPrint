@@ -22,16 +22,16 @@ BEGIN {
 		'Term::ReadKey'	=> undef,
 	};
 
-	my $get_terminal_width_glob = \*{_get_terminal_width};
+    my $get_terminal_width;
 	if ( can_load('modules' => $use_list) ) {
-		$$get_terminal_width_glob = sub {
+		$get_terminal_width= sub {
 			return eval {
 				(Term::ReadKey::GetTerminalSize())[0]
 			} // DEFAULT_TERM_WIDTH();
 		};
 	}
 	elsif ( can_run('stty') ) {
-		$$get_terminal_width_glob = sub {
+		$get_terminal_width= sub {
 			my $buffer;
 			if ( scalar run(
 				'command'	=> [qw(stty size)],
@@ -47,9 +47,11 @@ BEGIN {
 		};
 	}
 	else {
-		# 'use constant' constants are just subroutines.
-		$$get_terminal_width_glob = \&DEFAULT_TERM_WIDTH;
+		$get_terminal_width= \&DEFAULT_TERM_WIDTH;
 	}
+
+    no strict 'refs';
+    \*_get_terminal_width = $get_terminal_width;
 }
 
 # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
